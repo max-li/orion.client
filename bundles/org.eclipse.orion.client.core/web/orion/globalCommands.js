@@ -205,7 +205,7 @@ define(['require', 'dojo', 'dijit', 'orion/commands', 'orion/util', 'orion/textv
 					spacer = dojo.create("span", null, parentDismiss, "last");
 					dojo.addClass(spacer, "dismiss");
 					
-					var options = dojo.create("span", null, parentDismiss, "last");
+					var options = dojo.create("span", {role: "button"}, parentDismiss, "last");
 					dojo.addClass(options, "core-sprite-options");
 					dojo.addClass(options, "dismiss");
 					options.title = "More options...";
