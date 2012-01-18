@@ -282,7 +282,7 @@ define(['require', 'dojo', 'dijit', 'orion/commands', 'orion/util', 'orion/textv
 				'<span style="width: 16px; height: 16px; padding-right: 8px; text-align: right;">'+
 					'<img src="'+ require.toUrl("images/none.png") +'" id="progressPane"></img></span>' +
 				'<span id="statusPane" style="color: #5a5a5a;"></span>' +
-				'<span id="notifications"></span>' +
+				'<span id="notifications" aria-live="assertive" aria-atomic="true"></span>' +
 			'</td>' +
 		'</tr>' +
 		
