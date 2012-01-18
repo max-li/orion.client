@@ -219,7 +219,7 @@ define(['require', 'dojo', 'dijit', 'orion/commands', 'orion/util', 'orion/textv
 				spacer = dojo.create("span", null, parentDismiss, "last");
 				dojo.addClass(spacer, "dismiss");
 
-				var ok = dojo.create("span", null, parentDismiss, "last");
+				var ok = dojo.create("span", {role: "button"}, parentDismiss, "last");
 				ok.title = "Submit";
 				dojo.addClass(ok, "core-sprite-ok");
 				dojo.addClass(ok, "dismiss");
@@ -230,7 +230,7 @@ define(['require', 'dojo', 'dijit', 'orion/commands', 'orion/util', 'orion/textv
 				
 				spacer = dojo.create("span", null, parentDismiss, "last");
 				dojo.addClass(spacer, "dismiss");
-				var close = dojo.create("span", {id: "parameterClose"}, parentDismiss, "last");
+				var close = dojo.create("span", {id: "parameterClose", role: "button"}, parentDismiss, "last");
 				dojo.addClass(close, "imageSprite");
 				dojo.addClass(close, "core-sprite-delete");
 				dojo.addClass(close, "dismiss");
