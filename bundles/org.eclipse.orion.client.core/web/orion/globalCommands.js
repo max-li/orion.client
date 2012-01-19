@@ -484,7 +484,7 @@ define(['require', 'dojo', 'dijit', 'orion/commands', 'orion/util', 'orion/textv
 		dojo.place(topHTMLFragment, parent, "only");
 		
 		// place an empty div for keyAssist
-		dojo.place('<div id="keyAssist" style="display: none"; class="keyAssistFloat"></div>', document.body, "last");
+		dojo.place('<div id="keyAssist" style="display: none" class="keyAssistFloat" role="list" aria-atomic="true" aria-live="assertive"></div>', document.body, "last");
 		
 		// generate primary nav links. 
 		var primaryNav = dojo.byId("primaryNav");
@@ -648,7 +648,7 @@ define(['require', 'dojo', 'dijit', 'orion/commands', 'orion/util', 'orion/textv
 							var actionName = editorActions[i];
 							var bindings = editor.getTextView().getKeyBindings(actionName);
 							for (var j=0; j<bindings.length; j++) {
-								dojo.place("<span>"+mUtil.getUserKeyString(bindings[j])+" = " + actionName + "<br></span>", keyAssistNode, "last");
+								dojo.place("<span role=\"listitem\">"+mUtil.getUserKeyString(bindings[j])+" = " + actionName + "<br></span>", keyAssistNode, "last");
 							}
 						}
 					}
