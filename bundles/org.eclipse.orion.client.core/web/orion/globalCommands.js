@@ -358,6 +358,7 @@ define(['require', 'dojo', 'dijit', 'orion/commands', 'orion/util', 'orion/textv
 		        });
 		        dojo.addClass(menuButton.domNode, "commandImage");
 		        dojo.place(menuButton.domNode, userInfo, "only");
+		        dojo.destroy(menuButton.valueNode); // the valueNode gets picked up by screen readers; since it's not used, we can get rid of it
 			}
 		
 		
