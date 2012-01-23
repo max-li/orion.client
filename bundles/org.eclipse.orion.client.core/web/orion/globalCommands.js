@@ -205,7 +205,7 @@ define(['require', 'dojo', 'dijit', 'orion/commands', 'orion/util', 'orion/textv
 					spacer = dojo.create("span", null, parentDismiss, "last");
 					dojo.addClass(spacer, "dismiss");
 					
-					var options = dojo.create("span", null, parentDismiss, "last");
+					var options = dojo.create("span", {role: "button"}, parentDismiss, "last");
 					dojo.addClass(options, "core-sprite-options");
 					dojo.addClass(options, "dismiss");
 					options.title = "More options...";
@@ -219,7 +219,7 @@ define(['require', 'dojo', 'dijit', 'orion/commands', 'orion/util', 'orion/textv
 				spacer = dojo.create("span", null, parentDismiss, "last");
 				dojo.addClass(spacer, "dismiss");
 
-				var ok = dojo.create("span", null, parentDismiss, "last");
+				var ok = dojo.create("span", {role: "button"}, parentDismiss, "last");
 				ok.title = "Submit";
 				dojo.addClass(ok, "core-sprite-ok");
 				dojo.addClass(ok, "dismiss");
@@ -230,7 +230,7 @@ define(['require', 'dojo', 'dijit', 'orion/commands', 'orion/util', 'orion/textv
 				
 				spacer = dojo.create("span", null, parentDismiss, "last");
 				dojo.addClass(spacer, "dismiss");
-				var close = dojo.create("span", {id: "parameterClose"}, parentDismiss, "last");
+				var close = dojo.create("span", {id: "parameterClose", role: "button"}, parentDismiss, "last");
 				dojo.addClass(close, "imageSprite");
 				dojo.addClass(close, "core-sprite-delete");
 				dojo.addClass(close, "dismiss");
@@ -282,7 +282,7 @@ define(['require', 'dojo', 'dijit', 'orion/commands', 'orion/util', 'orion/textv
 				'<span style="width: 16px; height: 16px; padding-right: 8px; text-align: right;">'+
 					'<img src="'+ require.toUrl("images/none.png") +'" id="progressPane"></img></span>' +
 				'<span id="statusPane" style="color: #5a5a5a;"></span>' +
-				'<span id="notifications"></span>' +
+				'<span id="notifications" aria-live="assertive" aria-atomic="true"></span>' +
 			'</td>' +
 		'</tr>' +
 		
@@ -484,7 +484,7 @@ define(['require', 'dojo', 'dijit', 'orion/commands', 'orion/util', 'orion/textv
 		dojo.place(topHTMLFragment, parent, "only");
 		
 		// place an empty div for keyAssist
-		dojo.place('<div id="keyAssist" style="display: none"; class="keyAssistFloat"></div>', document.body, "last");
+		dojo.place('<div id="keyAssist" style="display: none" class="keyAssistFloat" role="list" aria-atomic="true" aria-live="assertive"></div>', document.body, "last");
 		
 		// generate primary nav links. 
 		var primaryNav = dojo.byId("primaryNav");
@@ -648,7 +648,7 @@ define(['require', 'dojo', 'dijit', 'orion/commands', 'orion/util', 'orion/textv
 							var actionName = editorActions[i];
 							var bindings = editor.getTextView().getKeyBindings(actionName);
 							for (var j=0; j<bindings.length; j++) {
-								dojo.place("<span>"+mUtil.getUserKeyString(bindings[j])+" = " + actionName + "<br></span>", keyAssistNode, "last");
+								dojo.place("<span role=\"listitem\">"+mUtil.getUserKeyString(bindings[j])+" = " + actionName + "<br></span>", keyAssistNode, "last");
 							}
 						}
 					}
