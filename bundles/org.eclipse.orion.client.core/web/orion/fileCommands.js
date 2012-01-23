@@ -309,7 +309,21 @@ define(["require", "dojo", "orion/util", "orion/commands", "orion/editor/regex",
 				}
 				return true;},
 			callback: function(data) {
-				serviceRegistry.getService("orion.core.favorite").makeFavorites(data.items);
+				var items = dojo.isArray(data.items) ? data.items : [data.items];
+				var favService = serviceRegistry.getService("orion.core.favorite");
+				var doAdd = function(item) {
+					return function(result) {
+						if (!result) {
+							favService.makeFavorites(item);
+						} else {
+							serviceRegistry.getService("orion.page.message").setMessage(item.Name + " is already a favorite.", 2000);
+						}
+					};
+				};
+				for (var i = 0; i < items.length; i++) {
+					var item = items[i];
+					favService.hasFavorite(item.ChildrenLocation || item.Location).then(doAdd(item));
+				}
 			}});
 		commandService.addCommand(favoriteCommand, "object");
 		
@@ -548,6 +562,23 @@ define(["require", "dojo", "orion/util", "orion/commands", "orion/editor/regex",
 				item = forceSingleItem(item);
 				return item.Location && mUtil.isAtRoot(item.Location);}});
 		commandService.addCommand(linkProjectCommand, "dom");
+		
+		var goUpCommand = new mCommands.Command({
+			name: "Go Up",
+			tooltip: "Move up to the parent folder",
+			imageClass: "core-sprite-move_up",
+			id: "eclipse.upFolder",
+			callback: function(data) {
+				var parents = forceSingleItem(data.items).Parents;
+				if (parents && parents.length > 0) {
+					window.document.location="#" + parents[0].ChildrenLocation;
+				}
+			},
+			visibleWhen: function(item) {
+				item = forceSingleItem(item);
+				return item.Parents;}});
+		commandService.addCommand(goUpCommand, "dom");
+
 					
 		var importCommand = new mCommands.Command({
 			name : "Import from zip...",

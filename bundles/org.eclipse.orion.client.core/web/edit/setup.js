@@ -15,13 +15,13 @@
 define(['require', 'dojo', 'orion/selection', 'orion/status', 'orion/progress', 'orion/dialogs',
         'orion/commands', 'orion/util', 'orion/favorites', 'orion/fileClient', 'orion/operationsClient', 'orion/searchClient', 'orion/globalCommands', 'orion/outliner',
         'orion/problems', 'orion/editor/contentAssist', 'orion/editorCommands', 'orion/editor/editorFeatures', 'orion/editor/editor', 'orion/syntaxchecker',
-        'orion/editor/textMateStyler', 'orion/breadcrumbs', 'examples/textview/textStyler', 'orion/textview/textView', 'orion/textview/textModel', 
+        'orion/editor/textMateStyler', 'orion/breadcrumbs', 'examples/textview/textStyler', 'examples/textview/textStylerOptions', 'orion/textview/textView', 'orion/textview/textModel', 
         'orion/textview/projectionTextModel', 'orion/textview/keyBinding','orion/searchAndReplace/textSearcher','orion/searchAndReplace/orionTextSearchAdaptor',
         'orion/editor/asyncStyler', 'orion/edit/dispatcher', 'orion/contentTypes', 'orion/PageUtil',
         'dojo/parser', 'dojo/hash', 'dijit/layout/BorderContainer', 'dijit/layout/ContentPane', 'orion/widgets/eWebBorderContainer' ], 
 		function(require, dojo, mSelection, mStatus, mProgress, mDialogs, mCommands, mUtil, mFavorites,
 				mFileClient, mOperationsClient, mSearchClient, mGlobalCommands, mOutliner, mProblems, mContentAssist, mEditorCommands, mEditorFeatures, mEditor,
-				mSyntaxchecker, mTextMateStyler, mBreadcrumbs, mTextStyler, mTextView, mTextModel, mProjectionTextModel, mKeyBinding, mSearcher,
+				mSyntaxchecker, mTextMateStyler, mBreadcrumbs, mTextStyler, mTextStylerOptions, mTextView, mTextModel, mProjectionTextModel, mKeyBinding, mSearcher,
 				mSearchAdaptor, mAsyncStyler, mDispatcher, mContentTypes, PageUtil) {
 	
 var exports = exports || {};
@@ -54,11 +54,10 @@ exports.setUpEditor = function(serviceRegistry, preferences, isReadOnly){
 		contentTypeService = new mContentTypes.ContentTypeService(serviceRegistry);
 	}());
 	
-	var splitArea = dijit.byId("orion.innerCoding"),
+	var splitArea = dijit.byId("topContainer"),
 		outlineDomNode = dojo.byId("outline"),
 		editorDomNode = dojo.byId("editor"),
-		searchFloat = dojo.byId("searchFloat"),
-		leftPane = dojo.byId("leftPane");
+		searchFloat = dojo.byId("searchFloat");
 
 	// Temporary.  This will evolve into something pluggable.
 	var syntaxHighlightProviders = serviceRegistry.getServiceReferences("orion.edit.highlighter");
@@ -90,6 +89,8 @@ exports.setUpEditor = function(serviceRegistry, preferences, isReadOnly){
 			
 			if (this.styler) {
 				editor.setFoldingEnabled(this.styler.foldingEnabled);
+				// Temporary. Add support for the preference page.
+				new mTextStylerOptions.TextStylerOptions(this.styler);
 			}
 			
 			if (!this.styler && syntaxHighlightProviders) {
@@ -479,7 +480,7 @@ exports.setUpEditor = function(serviceRegistry, preferences, isReadOnly){
 	inputManager.setInput(dojo.hash(), editor);
 	
 	// TODO search location needs to be gotten from somewhere
-	mGlobalCommands.generateBanner("toolbar", serviceRegistry, commandService, preferences, searcher, editor, editor, escHandler);
+	mGlobalCommands.generateBanner("banner", serviceRegistry, commandService, preferences, searcher, editor, editor, escHandler);
 	mGlobalCommands.generateDomCommandsInBanner(commandService, editor);
 		
 	var syntaxChecker = new mSyntaxchecker.SyntaxChecker(serviceRegistry, editor);

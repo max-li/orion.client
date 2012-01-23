@@ -21,7 +21,7 @@
 			description: "Clone a repository from github",
 			steps:[
 				{href: "http://www.github.com", linkName: "github", description: "Go to github and copy the repository URL for the repository you want to clone."},
-				{href: qualifyURL("../git/git-clone.html"), linkName: "Orion Repositories", description: "Go to the Orion repositories page and select the 'Clone' link at the top left of the page"},
+				{href: qualifyURL("../git/git-repository.html#"), linkName: "Orion Repositories", description: "Go to the Orion repositories page and select the 'Clone' link at the top left of the page"},
 				{href: "http://wiki.eclipse.org/Orion/How_Tos/Cloning_repository_from_github", linkName: "Orion/GitHub How-To", description: "The how-to provides further information about setting up credentials."}
 			]
 		});
@@ -55,14 +55,19 @@
 			href: qualifyURL("../sites/sites.html")
 		});
 		provider.registerServiceProvider("orion.page.link", serviceImpl, {
+			name: "Repositories",
+			id: "orion.repositories",
+			href: qualifyURL("../git/git-repository.html#")
+		});
+		provider.registerServiceProvider("orion.page.link", serviceImpl, {
+			name: "Settings",
+			id: "orion.sites",
+			href: qualifyURL("../settings/settings.html")
+		});
+		provider.registerServiceProvider("orion.page.link", serviceImpl, {
 			name: "Plugins",
 			id: "orion.plugins",
 			href: qualifyURL("../plugin/list.html")
-		});
-		provider.registerServiceProvider("orion.page.link", serviceImpl, {
-			name: "Repositories",
-			id: "orion.repositories",
-			href: qualifyURL("../git/git-clone.html")
 		});
 		provider.connect();
 	};

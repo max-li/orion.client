@@ -115,6 +115,7 @@ define(['require', 'dojo', 'dijit', 'orion/util', 'dijit/Menu', 'dijit/form/Drop
 		this._objectScope = {};
 		this._globalScope = {};
 		this._namedGroups = {};
+		this._topics = {};
 		this._activeBindings = {};
 		this._activeModalCommandNode = null;
 		this._urlBindings = {};
@@ -374,8 +375,10 @@ define(['require', 'dojo', 'dijit', 'orion/util', 'dijit/Menu', 'dijit/form/Drop
 		 *  commands apply across the page, "dom" level commands apply only when the 
 		 *  specified dom element is rendering commands, and "object" scope applies 
 		 *  to particular objects being displayed in widgets such as lists or trees.
+		 * @param {String} topic (optional).  A topic describing the command that can be used 
+		 *  to assemble lists of commands that relate to each other.
 		 */
-		addCommand: function(command, scope) {
+		addCommand: function(command, scope, topic) {
 			switch (scope) {
 			case "dom":
 				this._domScope[command.id] = command;
@@ -389,7 +392,34 @@ define(['require', 'dojo', 'dijit', 'orion/util', 'dijit/Menu', 'dijit/form/Drop
 			default:
 				throw "unrecognized command scope " + scope;
 			}
+			if (topic) {
+				this._addToTopic(command, topic);
+			}
 		},
+		
+		/**
+		 * Adds the specified command to the topic list.
+		 */
+		_addToTopic: function(command, topic) {
+			var parentTable = this._topics;
+			if (topic) {
+				var segments = topic.split("/");
+				for (var i = 0; i < segments.length; i++) {
+					if (segments[i].length > 1) {
+						if (!parentTable[segments[i]]) {
+							// create an empty slot with children.  Use topic property to identify slots we created.
+							parentTable[segments[i]] = {topic: true, children: {}};
+						} 
+						parentTable = parentTable[segments[i]].children;
+					}
+				}
+				parentTable[command.id] = command;
+			}
+		},
+		
+		renderRelatedTasks: function(topic, parent, items, renderType, forceText) {
+		},
+		
 		
 		/**
 		 * Registers a command group and specifies visual information about the group.
@@ -561,6 +591,9 @@ define(['require', 'dojo', 'dijit', 'orion/util', 'dijit/Menu', 'dijit/form/Drop
 					child.destroy();
 				}
 			}
+			if (scope === "dom" || scope === "global") {
+				mUtil.forceLayout(parent);
+			}
 		},
 		
 		_render: function(commandItems, parent, scope, items, handler, renderType, forceText, userData, commandList, activeCommandClass, inactiveCommandClass) {
@@ -628,7 +661,7 @@ define(['require', 'dojo', 'dijit', 'orion/util', 'dijit/Menu', 'dijit/form/Drop
 										new CommandTooltip({
 											connectId: [menuButton.domNode],
 											label: "Actions menu",
-											position: ["below", "above", "right", "left"], // otherwise defaults to right and obscures adjacent commands
+											position: ["above", "left", "right", "below"], // otherwise defaults to right and obscures adjacent commands
 											commandParent: parent,
 											commandService: this
 										});
@@ -881,7 +914,7 @@ define(['require', 'dojo', 'dijit', 'orion/util', 'dijit/Menu', 'dijit/form/Drop
 					new CommandTooltip({
 						connectId: [link],
 						label: this.tooltip,
-						position: ["below", "above", "right", "left"], // otherwise defaults to right and obscures adjacent commands
+						position: ["above", "left", "right", "below"], // otherwise defaults to right and obscures adjacent commands
 						commandParent: parent,
 						commandService: context.commandService
 					});
@@ -937,7 +970,7 @@ define(['require', 'dojo', 'dijit', 'orion/util', 'dijit/Menu', 'dijit/form/Drop
 				new CommandTooltip({
 					connectId: [image],
 					label: this.tooltip || this.name,
-					position: ["below", "above", "right", "left"], // otherwise defaults to right and obscures adjacent commands
+					position: ["above", "left", "right", "below"], // otherwise defaults to right and obscures adjacent commands
 					commandParent: parent,
 					commandService: context.commandService
 				});
@@ -979,7 +1012,7 @@ define(['require', 'dojo', 'dijit', 'orion/util', 'dijit/Menu', 'dijit/form/Drop
 				new CommandTooltip({
 					connectId: [element],
 					label: this.tooltip,
-					position: ["below", "above", "right", "left"], // otherwise defaults to right and obscures adjacent commands
+					position: ["above", "left", "right", "below"], // otherwise defaults to right and obscures adjacent commands
 					commandParent: parent,
 					commandService: context.commandService
 				});
