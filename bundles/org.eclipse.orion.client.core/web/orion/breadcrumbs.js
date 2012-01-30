@@ -84,6 +84,7 @@ define(['require', 'dojo', 'orion/util'], function(require, dojo, mUtil) {
 					dojo.place(document.createTextNode(' >> '), slash, "only");
 					this.path+="/";
 					dojo.addClass(slash, "breadcrumb");
+					dojo.attr(slash, "role", "separator");
 					crumbs.appendChild(slash);
 				} else {
 					// we are at the root.  Get rid of any href since we are already here
@@ -115,6 +116,7 @@ define(['require', 'dojo', 'orion/util'], function(require, dojo, mUtil) {
 						dojo.place(document.createTextNode(' >> '), slash, "only");
 						this.path += '/';
 						dojo.addClass(slash, "breadcrumb");
+						dojo.attr(slash, "role", "separator");
 						crumbs.appendChild(slash);
 					}
 				}

@@ -278,29 +278,31 @@ define(['require', 'dojo', 'dijit', 'orion/commands', 'orion/extensionCommands',
 
 	// BEGIN TOP BANNER FRAGMENT
 	var topHTMLFragment =
-	//Top row:  Logo + discovery links + user
-	'<div id="staticBanner" class="layoutBlock topRowBanner">' +
-		'<a id="home" class="layoutLeft primaryNav" href="' + require.toUrl("index.html") + '"><img src="' + require.toUrl("images/orion-small-lightondark.gif") + '" alt="Orion Logo"/></a>' +
-		'<div id="primaryNav" class="layoutLeft primaryNav"></div>' +
-		'<div id="help" class="layoutRight help"><a id="help" href="' + require.toUrl("help/index.jsp") + '"><img src="' + require.toUrl("images/help.gif") + '" alt="Help"/></a></div>'+
-		'<div id="userInfo" class="layoutRight primaryNav"></div>' +
-		'<div class="layoutRight primaryNav">|</div>' +
-	'</div>' +
-	//Title area
-	'<div id="titleArea" class="layoutBlock titleArea">' +
-		'<div id="pageTitle" class="layoutLeft pageTitle"></div>' +
-		'<input type="search" id="search" placeholder="Search root" title="Type a keyword or wild card to search in root" class="layoutRight searchbox">' +
-		'<div id="relatedLinks" class="layoutRight pageNav"></div>' +
-		'<div id="globalActions" class="layoutRight pageNav"></div>' +
-		'<div id="dimension" class="layoutBlock dimension"></div>' +
-		'<div id="location" class="layoutBlock currentLocation"></div>' +
-	'</div>';
+	'<header role="banner">' + 
+		//Top row:  Logo + discovery links + user
+		'<div id="staticBanner" class="layoutBlock topRowBanner">' +
+			'<a id="home" class="layoutLeft primaryNav" href="' + require.toUrl("index.html") + '"><img src="' + require.toUrl("images/orion-small-lightondark.gif") + '" alt="Orion Logo"/></a>' +
+			'<nav id="primaryNav" class="layoutLeft primaryNav" role="navigation"></nav>' +
+			'<div id="help" class="layoutRight help"><a id="help" href="' + require.toUrl("help/index.jsp") + '"><img src="' + require.toUrl("images/help.gif") + '" alt="Help"/></a></div>'+
+			'<div id="userInfo" class="layoutRight primaryNav"></div>' +
+			'<div class="layoutRight primaryNav">|</div>' +
+		'</div>' +
+		//Title area
+		'<div id="titleArea" class="layoutBlock titleArea">' +
+			'<div id="pageTitle" class="layoutLeft pageTitle"></div>' +
+			'<input type="search" id="search" placeholder="Search root" title="Type a keyword or wild card to search in root" class="layoutRight searchbox" role="search">' +
+			'<div id="relatedLinks" class="layoutRight pageNav"></div>' +
+			'<div id="globalActions" class="layoutRight pageNav"></div>' +
+			'<div id="dimension" class="layoutBlock dimension"></div>' +
+			'<div id="location" class="layoutBlock currentLocation"></div>' +
+		'</div>' +
+	'</header>';
 	// END TOP BANNER FRAGMENT
 	
 	// BEGIN BOTTOM BANNER FRAGMENT
 	// styling of the surrounding div (text-align, etc) is in ide.css "footer"
 	var bottomHTMLFragment = 
-		'<div class="layoutBlock">' +
+		'<footer class="layoutBlock" role="contentinfo">' +
 			'<div class="footerBlock">' +
 				'This is a Beta build of Orion. Please try it out but BEWARE your data may be lost.' +
 			'</div>' +
@@ -312,7 +314,7 @@ define(['require', 'dojo', 'dijit', 'orion/commands', 'orion/extensionCommands',
 				'<a href="http://www.eclipse.org/legal/copyright.php" target="_blank">Copyright Agent</a> | '+
 				'<a href="' + require.toUrl("/operations/list.html") +'" target="_blank">Server Operations</a>' +
 			'</div>' +
-		'</div>';
+		'</footer>';
 	// END BOTTOM BANNER FRAGEMENT
 
 	var toolbarFragment = 
