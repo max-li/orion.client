@@ -930,6 +930,17 @@ define(['require', 'dojo', 'dijit', 'orion/util', 'dijit/Menu', 'dijit/form/Drop
 							this.callback.call(context.handler, context);
 						}
 					});
+					// onClick events do not register with keyboard for images
+					dojo.connect(image, "onkeypress", this, function(e) {
+						if(e.keyCode === dojo.keys.ENTER || e.keyCode === dojo.keys.SPACE) {
+							// collect parameters in advance if specified
+							if (this.parameters && context.collectsParameters()) {
+								context.commandService._collectParameters("tool", context);
+							} else if (this.callback) {
+								this.callback.call(context.handler, context);
+							}
+						}
+					});
 				} else {
 					context.domNode = link;
 					dojo.connect(link, "onclick", this, function() {
@@ -943,13 +954,21 @@ define(['require', 'dojo', 'dijit', 'orion/util', 'dijit/Menu', 'dijit/form/Drop
 				}
 			}
 			if (image) {
-				// TODO get image in the focus order for accessibility 
 				image.src = this.image;	
 				dojo.addClass(image, 'commandImage');
 				if (this.imageClass) {
 					dojo.addClass(image, this.spriteClass);
 					dojo.addClass(image, this.imageClass);
 				} 
+				if (dojo.attr(link, "href") === "javascript:void(0)") {
+					dojo.attr(image, "tabindex", "0");
+					dojo.attr(image, "role", "button");
+					dojo.attr(link, "tabindex", "-1");
+					dojo.removeAttr(link, "role");
+					dojo.removeAttr(link, "href");
+				} else {
+					dojo.attr(link, "role", "link");
+				}
 				dojo.place(image, link, "last");
 				new CommandTooltip({
 					connectId: [image],
