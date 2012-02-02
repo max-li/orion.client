@@ -96,6 +96,10 @@ button {
 	cursor:pointer;
 }
 
+.navbar-item:focus {
+	background: #eeeeee;
+}
+
 ul,menu,dir {
 	display: block;
 	list-style-type: disc;
@@ -262,6 +266,7 @@ input[type="checkbox"] {
 }
 
 .interactionClosed {
+	display: none;
 	height: 0;
 	opacity: 0;
 	margin-right: 16px;

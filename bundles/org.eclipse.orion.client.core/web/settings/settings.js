@@ -126,7 +126,7 @@ function processInputType( category, label, item, node, ui ){
 	
 		case "combo":
 			
-			var select = dojo.create( "select", { onchange: "comboSelection(event)" }, node );
+			var select = dojo.create( "select", { onchange: "comboSelection(event)", role: "combobox" }, node );
 			
 			select.category = category;
 			select.item = label;
@@ -219,7 +219,11 @@ function addPlugins(){
 	var item = { id: initialSettings.length, 
 				 innerHTML: "Plugins", 
 				 "class": 'navbar-item',
-				 onClick: 'showPlugins(event)' };
+				 onClick: 'showPlugins(event)',
+				 onKeypress: 'if(event.keyCode === dojo.keys.ENTER || event.keyCode === dojo.keys.SPACE) showPlugins(event)',
+				 role: "tab",
+				 tabindex: "0",
+				 "aria-selected": "false" };
 					
 	addCategory( item );
 }
@@ -229,11 +233,13 @@ function addNewPlugins(){
 	if( newPluginDialog === false ){		
 		dojo.removeClass( "newpluginsdialog", "interactionClosed" );
 		dojo.addClass( "newpluginsdialog", "interactionOpen" );
+		dojo.attr("newpluginsdialog","aria-hidden", "false");
 		dojo.byId("addpluginscontrol").innerHTML = "Hide Dialog";
 		newPluginDialog = true;
 	}else{
 		dojo.removeClass( "newpluginsdialog", "interactionOpen" );
 		dojo.addClass( "newpluginsdialog", "interactionClosed" );
+		dojo.attr("newpluginsdialog","aria-hidden", "true");
 		dojo.byId("addpluginscontrol").innerHTML = "Add Plugins";
 		newPluginDialog = false;
 	} 
@@ -301,6 +307,7 @@ function showPlugins( event ){
 
 	if( selectedCategory ){
 		dojo.removeClass( selectedCategory, "navbar-item-selected" );
+		dojo.attr(selectedCategory, "aria-selected", "false");
 	}
 	
 	if( event ){
@@ -308,6 +315,9 @@ function showPlugins( event ){
 	}
 	
 	dojo.addClass( selectedCategory, "navbar-item-selected" );
+	dojo.attr(selectedCategory, "aria-selected", "true");
+	dojo.attr(dojo.byId("mainNode"), "aria-labelledby", selectedCategory.id);
+	
 	
 	var tableNode = dojo.byId( 'table' );
 	
@@ -321,13 +331,13 @@ function showPlugins( event ){
 	
 	dojo.create( "a", { id: "oldlink", href:"../plugin/list.html", innerHTML:"Services", "class":"oldLink", onclick:"addNewPlugins()"}, titleWrapper );
 	
-	dojo.create( "div", { id: "addpluginscontrol", innerHTML:"Add Plugins", "class":"additions", onclick:"addNewPlugins()"}, titleWrapper );
+	dojo.create( "div", { id: "addpluginscontrol", innerHTML:"Add Plugins", "class":"additions", onclick:"addNewPlugins()", onKeypress: 'if(event.keyCode === dojo.keys.ENTER || event.keyCode === dojo.keys.SPACE) addNewPlugins()', tabindex: "0", role: "button"}, titleWrapper );
 	
 	/* 	The plugins page has a slightly different layout from the other settings pages - so this content 
 		section provides the slide down capability to reveal the dialog for adding more plugins */
 	
 	var content =	'<div class="displaytable">' +
-						'<div id="newpluginsdialog" class="interactionClosed">' +
+						'<div id="newpluginsdialog" class="interactionClosed" aria-hidden="true">' +
 							'<table id="dev-table" width="100%">' +
 								'<tr>' +
 									'<td>' +
@@ -457,10 +467,13 @@ function selectCategory( event ){
 
 	if( selectedCategory ){
 		dojo.removeClass( selectedCategory, "navbar-item-selected" );
+		dojo.attr(selectedCategory, "aria-selected", "false");
 	}
-	
+
 	selectedCategory = event.currentTarget;
 	dojo.addClass( selectedCategory, "navbar-item-selected" );
+	dojo.attr(selectedCategory, "aria-selected", "true");
+	dojo.attr(dojo.byId("mainNode"), "aria-labelledby", selectedCategory.id);
 	displaySettings( selectedCategory.id );
 }
 
@@ -471,7 +484,11 @@ function drawUserInterface( settings ){
 		var item = { id: count, 
 					 innerHTML: settings[count].category, 
 					 "class": 'navbar-item',
-					 onClick: 'selectCategory(event)' };
+					 onClick: 'selectCategory(event)',
+					 onKeypress: 'if(event.keyCode === dojo.keys.ENTER || event.keyCode === dojo.keys.SPACE) selectCategory(event) ',
+					 role: "tab",
+					 tabindex: "0",
+					 "aria-selected": "false" };
 		
 		addCategory( item );
 	}

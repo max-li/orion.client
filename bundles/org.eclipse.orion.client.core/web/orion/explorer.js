@@ -269,6 +269,8 @@ exports.ExplorerRenderer = (function() {
 				var check = document.createElement("span");
 				check.id = this.getCheckBoxId(tableRow.id);
 				dojo.addClass(check, "selectionCheckmark");
+				dojo.attr(check, "role", "checkbox");
+				dojo.attr(check, "aria-checked", "false");
 				check.itemId = tableRow.id;
 				if(this.getCheckedFunc){
 					check.checked = this.getCheckedFunc(item);
@@ -296,6 +298,7 @@ exports.ExplorerRenderer = (function() {
 				dojo.toggleClass(tableRow, "checkedRow", checked);
 			}
 			dojo.toggleClass(checkBox, "selectionCheckmarkChecked", checked);
+			dojo.attr(checkBox, "aria-checked", checked ? "true" : "false");
 			if(this.onCheckedFunc){
 				this.onCheckedFunc(checkBox.itemId, checked, manually);
 			}
@@ -334,6 +337,7 @@ exports.ExplorerRenderer = (function() {
 						if (check) {
 							check.checked = true;
 							dojo.addClass(check, "selectionCheckmarkChecked");
+							dojo.attr(check, "aria-checked", "true");
 						}
 					}
 				}
