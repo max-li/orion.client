@@ -277,7 +277,7 @@ orion.GitStatusTableRenderer = (function() {
 			this._cmdSpan = dojo.create("span", {}, localTools, "last");
 			dojo.addClass(this._cmdSpan, "paneHeadingCommands");
 			this._statusContentId = this._parentId + "_" + this._type;
-			dojo.create("div", {id:this._statusContentId}, this._parentId, "last");
+			dojo.create("section", {id:this._statusContentId, role: "region", "aria-labelledby": this._type + "_header"}, this._parentId, "last");
 		},
 		
 		select: function(selected){
@@ -319,8 +319,8 @@ orion.GitCommitZoneRenderer = (function() {
 	}
 	GitCommitZoneRenderer.prototype = {
 		render: function (renderSeparator) {
-			this._commitZone = dojo.create("div", null, this._parentId, "last");
-			var headingSection = dojo.create("div", null, this._commitZone);
+			this._commitZone = dojo.create("section", {role: "region", "aria-labelledby":"commitheader"}, this._parentId, "last");
+			var headingSection = dojo.create("div", {id: "commitheader"}, this._commitZone);
 			dojo.addClass(headingSection, "auxpaneHeading paneHeadingFixed");
 			var title = dojo.create("span", {innerHTML: "Commit message"}, headingSection);
 			
@@ -483,7 +483,7 @@ orion.GitLogTableRenderer = (function() {
 	}
 	GitLogTableRenderer.prototype = {
 		render: function (renderSeparator) {
-			var section = dojo.create("div", {id:this._sectionId}, this._parentId);
+			var section = dojo.create("section", {id:this._sectionId, role:"region", "aria-labelledby":this._type + "_header"}, this._parentId);
 			var headingSection = mUtil.createPaneHeading(section, this._type + "heading", this._header, true, this._type + "_header", this._type + "commands");
 			dojo.addClass(headingSection, "paneHeadingFixed");
 			this._cmdSpanAdditional = dojo.create("span", {}, this._type + "commands", "last");

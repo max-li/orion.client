@@ -239,7 +239,7 @@ exports.GitRepositoryExplorer = (function() {
 		}
 		
 		var content =	
-			'<div class="git-table">' +
+			'<div class="git-table" role="region" aria-labelledby="repositoryHeader">' +
 				'<div class="plugin-settings">' +
 					'<list id="repositoryNode" class="plugin-settings-list"></list>' +
 				'</div>' +
@@ -294,7 +294,7 @@ exports.GitRepositoryExplorer = (function() {
 		dojo.create( "div", item, titleWrapper );
 		
 		var content =	
-			'<div class="git-table">' +
+			'<div class="git-table" role="region" aria-labelledby="workingDirectoryHeader">' +
 				'<div class="plugin-settings">' +
 					'<list id="workingDirectoryNode" class="plugin-settings-list"></list>' +
 				'</div>' +
@@ -371,7 +371,7 @@ exports.GitRepositoryExplorer = (function() {
 		dojo.create( "div", { id: "viewAllBranchSectionActionsArea", "class":"additions-light", "style":"padding-top:10px"}, titleWrapper );
 
 		var content =	
-			'<div class="git-table">' +
+			'<div class="git-table" role="region" aria-labelledby="branchHeader">' +
 				'<div class="plugin-settings">' +
 					'<list id="branchNode" class="plugin-settings-list"></list>' +
 				'</div>' +
@@ -440,7 +440,7 @@ exports.GitRepositoryExplorer = (function() {
 		dojo.create( "div", { id: "remoteBranchSectionProgress", "class": "sectionProgress", innerHTML: "..."}, titleWrapper );
 		
 		var content =	
-			'<div class="git-table">' +
+			'<div class="git-table" role="region" aria-labelledby="remoteBranchHeader">' +
 				'<div class="plugin-settings">' +
 					'<list id="remoteBranchNode" class="plugin-settings-list"></list>' +
 				'</div>' +
@@ -521,7 +521,7 @@ exports.GitRepositoryExplorer = (function() {
 		dojo.create( "div", { id: "viewAllCommitSectionActionsArea", "class":"additions-light", "style":"padding-top:10px"}, titleWrapper );
 		
 		var content =	
-			'<div class="git-table">' +
+			'<div class="git-table" role="region" aria-labelledby="commitHeader">' +
 				'<div class="plugin-settings">' +
 					'<list id="commitNode" class="plugin-settings-list"></list>' +
 				'</div>' +
@@ -721,7 +721,7 @@ exports.GitRepositoryExplorer = (function() {
 		dojo.create( "div", { id: "viewAllTagSectionActionsArea", "class":"additions-light", "style":"padding-top:10px"}, titleWrapper );
 
 		var content =	
-			'<div class="git-table">' +
+			'<div class="git-table" role="region" aria-labelledby="tagHeader">' +
 				'<div class="plugin-settings">' +
 					'<list id="tagNode" class="plugin-settings-list"></list>' +
 				'</div>' +
@@ -831,7 +831,7 @@ exports.GitRepositoryExplorer = (function() {
 		this.registry.getService("orion.page.command").renderCommands(dojo.byId("remoteSectionActionsArea"), "dom", repository, this, "tool", false);
 		
 		var content =	
-			'<div class="git-table">' +
+			'<div class="git-table" role="region" aria-labelledby="remoteHeader">' +
 				'<div class="plugin-settings">' +
 					'<list id="remoteNode" class="plugin-settings-list"></list>' +
 				'</div>' +

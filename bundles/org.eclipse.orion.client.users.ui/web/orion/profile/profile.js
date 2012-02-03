@@ -143,7 +143,7 @@ define(['require', 'dojo', 'dijit', 'orion/commands', 'orion/auth', 'orion/bread
 			
 			
 			for(var i=0; i<pluginsList.length; i++){
-				var pluginDiv = dojo.create("div", {style: "clear: both", innerHTML: "Loading " + pluginsList[i].Url + "..."}, userProfile.profileForm.get("domNode"));
+				var pluginDiv = dojo.create("section", {style: "clear: both", innerHTML: "Loading " + pluginsList[i].Url + "...", role: "region"}, userProfile.profileForm.get("domNode"));
 				var pluginReference= this.pluginRegistry.getPlugin(pluginsList[i].Url);
 				if(pluginReference===null){
 					var registry = this.registry;
@@ -280,7 +280,7 @@ define(['require', 'dojo', 'dijit', 'orion/commands', 'orion/auth', 'orion/bread
 				});
 				sectionPane.placeAt(placeholder);
 				
-				
+				dojo.attr(placeholder,"aria-labelledby", content.sections[0].id);
 				
 				var sectionContents = dojo.create("div", null, placeholder);
 				
