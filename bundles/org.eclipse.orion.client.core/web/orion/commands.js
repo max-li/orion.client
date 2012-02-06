@@ -1006,6 +1006,17 @@ define(['require', 'dojo', 'dijit', 'orion/util', 'dijit/Menu', 'dijit/form/Drop
 						this.callback.call(context.handler, context);
 					}
 				});
+				// onClick events do not register for spans when using the keyboard
+				dojo.connect(element, "onkeypress", this, function(e) {
+					if (e.keyCode === dojo.keys.ENTER || e.keyCode === dojo.keys.SPACE) {
+						// collect parameters in advance if specified
+						if (this.parameters && context.collectsParameters()) {
+							context.commandService._collectParameters("button", context);
+						} else if (this.callback) {
+							this.callback.call(context.handler, context);
+						}
+					}
+				});
 				var overClass;
 				if (this.name) {
 					dojo.place(window.document.createTextNode(this.name), element, "last");
