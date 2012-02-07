@@ -941,6 +941,9 @@ define(['require', 'dojo', 'dijit', 'orion/util', 'dijit/Menu', 'dijit/form/Drop
 					dojo.addClass(element, "commandMissingImageButton commandButton");
 				} else {
 					image = addImageToElement(this, element, name);
+					if(this.tooltip) {
+						dojo.attr(element, "aria-label", this.tooltip);
+					}
 				}
 				dojo.connect(element, "onclick", this, function() {
 					// collect parameters in advance if specified
@@ -948,6 +951,17 @@ define(['require', 'dojo', 'dijit', 'orion/util', 'dijit/Menu', 'dijit/form/Drop
 						context.commandService._collectParameters(context);
 					} else if (this.callback) {
 						this.callback.call(context.handler, context);
+					}
+				});
+				// onClick events do not register with keyboard for spans
+				dojo.connect(element, "onkeypress", this, function(e) {
+					if(e.keyCode === dojo.keys.ENTER || e.keyCode === dojo.keys.SPACE) {
+						// collect parameters in advance if specified
+						if (this.parameters && context.collectsParameters()) {
+							context.commandService._collectParameters("tool", context);
+						} else if (this.callback) {
+							this.callback.call(context.handler, context);
+						}
 					}
 				});
 				var overClass = image ? "commandImageOver" : "commandButtonOver";
