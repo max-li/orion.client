@@ -265,11 +265,13 @@ exports.ExplorerRenderer = (function() {
 			}
 		},
 		getCheckboxColumn: function(item, tableRow){
+			dojo.attr(tableRow, "aria-selected", "undefined");
 			if (this._useCheckboxSelection) {
 				var checkColumn = document.createElement('td');
 				var check = document.createElement("span");
 				check.id = this.getCheckBoxId(tableRow.id);
 				dojo.addClass(check, "selectionCheckmark");
+				dojo.attr(tableRow, "aria-checked", "false");
 				check.itemId = tableRow.id;
 				if(this.getCheckedFunc){
 					check.checked = this.getCheckedFunc(item);
@@ -277,6 +279,7 @@ exports.ExplorerRenderer = (function() {
 						dojo.toggleClass(tableRow, "checkedRow", check.checked);
 					}
 					dojo.toggleClass(check, "selectionCheckmarkChecked", check.checked);
+					dojo.attr(tableRow, "aria-checked", check.checked.toString());
 				}
 				checkColumn.appendChild(check);
 				dojo.connect(check, "onclick", dojo.hitch(this, function(evt) {
@@ -284,6 +287,8 @@ exports.ExplorerRenderer = (function() {
 					this.onCheck(tableRow, evt.target, newValue, true);
 				}));
 				return checkColumn;
+			} else {
+				dojo.attr(tableRow, "aria-checked", "undefined");
 			}
 		},
 		
@@ -297,6 +302,7 @@ exports.ExplorerRenderer = (function() {
 				dojo.toggleClass(tableRow, "checkedRow", checked);
 			}
 			dojo.toggleClass(checkBox, "selectionCheckmarkChecked", checked);
+			dojo.attr(tableRow, "aria-checked", checked.toString());
 			if(this.onCheckedFunc){
 				this.onCheckedFunc(checkBox.itemId, checked, manually);
 			}
@@ -335,6 +341,7 @@ exports.ExplorerRenderer = (function() {
 						if (check) {
 							check.checked = true;
 							dojo.addClass(check, "selectionCheckmarkChecked");
+							dojo.attr(tableRow, "aria-checked", "true");
 						}
 					}
 				}
@@ -546,6 +553,7 @@ exports.SelectionRenderer = (function(){
 	SelectionRenderer.prototype.renderRow = function(item, tableRow) {
 		dojo.style(tableRow, "verticalAlign", "baseline");
 		dojo.addClass(tableRow, "treeTableRow");
+		dojo.attr(tableRow, "role", "treeitem");
 
 		var checkColumn = this.getCheckboxColumn(item, tableRow);
 		if(checkColumn) {

@@ -130,8 +130,9 @@ define(['require', 'dojo', 'orion/util', 'orion/explorer', 'orion/explorerNavHan
 			if (item.Directory) {
 				// defined in ExplorerRenderer.  Sets up the expand/collapse behavior
 				this.getExpandImage(tableRow, span);
-				link = dojo.create("a", {className: "navlinkonpage", id: tableRow.id+"NameColumn", href: "#" + item.ChildrenLocation}, span, "last");
+				link = dojo.create("a", {className: "navlinkonpage", id: tableRow.id+"NameColumn", href: "#" + item.ChildrenLocation, tabindex: "-1"}, span, "last");
 				dojo.place(document.createTextNode(item.Name), link, "last");
+				dojo.attr(tableRow, "aria-expanded", "false");
 			} else {
 				var i;			
 				// Images: always generate link to file. Non-images: use the "open with" href if one matches,
@@ -158,11 +159,18 @@ define(['require', 'dojo', 'orion/util', 'orion/explorer', 'orion/explorerNavHan
 					href = this.defaultEditor.hrefCallback({items: item});
 				}				
 				// link with file image and name
-				link = dojo.create("a", {className: "navlink", id: tableRow.id+"NameColumn", href: href}, span, "last");
+				link = dojo.create("a", {className: "navlink", id: tableRow.id+"NameColumn", href: href, tabindex: "-1"}, span, "last");
 				addImageToLink(contentType, link);
 				dojo.place(document.createTextNode(item.Name), link, "last");
 			}
+			dojo.attr(tableRow, "aria-labelledby", tableRow.id+"NameColumn");
 			this.explorer.registry.getService("orion.page.command").renderCommands(span, "object", item, this.explorer, "tool", false, null, "commandActiveItem", "commandInactiveItem");
+			var actionsButton = dojo.query('.dijitButtonContents', span)[0];
+			dojo.attr(actionsButton, "tabindex", "-1");
+			dojo.connect(actionsButton, "onfocus", function() {
+				dojo.byId("explorer-tree").focus();
+			});
+			
 			return col;
 		case 1:
 			var dateColumn = document.createElement('td');
@@ -182,6 +190,9 @@ define(['require', 'dojo', 'orion/util', 'orion/explorer', 'orion/explorerNavHan
 					dateColumn.style.cursor ="default";
 				});
 			}
+			dateColumn.id = tableRow.id+"DateColumn"; 
+			var descriptionIds = dojo.attr(tableRow, "aria-describedby");
+			dojo.attr(tableRow, "aria-describedby", descriptionIds ? descriptionIds + " " + tableRow.id+"DateColumn" : tableRow.id+"DateColumn");
 
 			return dateColumn;
 		case 2:
@@ -192,6 +203,10 @@ define(['require', 'dojo', 'orion/util', 'orion/explorer', 'orion/explorerNavHan
 				sizeColumn.innerHTML = dojo.number.format(Math.ceil(kb)) + " KB";
 			}
 			dojo.style(sizeColumn, "textAlign", "right");
+			sizeColumn.id = tableRow.id+"SizeColumn"; 
+			var descriptionIds = dojo.attr(tableRow, "aria-describedby");
+			dojo.attr(tableRow, "aria-describedby", descriptionIds ? descriptionIds + " " + tableRow.id+"SizeColumn" : tableRow.id+"SizeColumn");
+			
 			return sizeColumn;
 		}
 	};

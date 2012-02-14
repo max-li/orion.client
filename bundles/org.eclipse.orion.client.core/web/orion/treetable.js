@@ -104,6 +104,7 @@ define(['dojo'], function(dojo) {
 				var row = document.createElement('tr');
 				row.id = this._treeModel.getId(children[i]);
 				row._depth = indentLevel;
+				dojo.attr(row, "aria-level", indentLevel + 1);
 				// This is a perf problem and potential leak because we're bashing a dom node with
 				// a javascript object.  (Whereas above we are using simple numbers/strings). 
 				// We should consider an item map.
@@ -145,6 +146,7 @@ define(['dojo'], function(dojo) {
 					// If the row should be expanded
 					if (row && (forceExpand || row._expanded)) {
 						row._expanded = true;
+						dojo.attr(row, "aria-expanded", "true");
 						this._removeChildRows(parentId);
 						if(children){
 							this._generateChildren(children, row._depth+1, row, "after");
@@ -236,6 +238,7 @@ define(['dojo'], function(dojo) {
 						postExpandFunc.apply(this, args);
 					}
 				});
+				dojo.attr(row, "aria-expanded", "true");
 			}
 		}, 
 		
@@ -281,6 +284,7 @@ define(['dojo'], function(dojo) {
 				row._expanded = false;
 				this._removeChildRows(id);
 				this._rowsChanged();
+				dojo.attr(row, "aria-expanded", "false");
 			}
 			if(this._onCollapse){
 				this._onCollapse(row._item);

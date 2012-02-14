@@ -162,6 +162,7 @@ exports.ExplorerNavHandler = (function() {
 			var currentRow = this.getRowDiv(model);
 			if(currentRow) {
 				dojo.toggleClass(currentRow, "treeIterationCursor", on);
+				dojo.attr(this.explorer.myTree._parent, "aria-activedescendant", currentRow.id);
 			}
 		},
 		
@@ -254,7 +255,18 @@ exports.ExplorerNavHandler = (function() {
 			}
 			return false;
 		},
+		
+		_activateOptions: function() {
+			var currentRow = this.getRowDiv(this._modelIterator.cursor());
+			var actionsButtonNode = dojo.query('.dijitButtonContents', currentRow)[0];
+			if(actionsButtonNode) {
+				var actionsButton = dijit.byId(actionsButtonNode.id);
 			
+				actionsButton.toggleDropDown();
+				actionsButton.dropDown.focus();
+			}
+		},
+		
 		onCollapse: function(model)	{
 			if(this._modelIterator.collapse(model)){
 				this.cursorOn();
@@ -319,7 +331,12 @@ exports.ExplorerNavHandler = (function() {
 		},
 
 		//Space key toggles the check box on the current row if the renderer uses check box
+		//If the shift key is pressed, it instead activates the actions menu if present.
 		onSpace: function(e) {
+			if(e.shiftKey) {
+				this._activateOptions();
+				return false;
+			}
 			this._checkRow(null, true);
 			e.preventDefault();
 		},
