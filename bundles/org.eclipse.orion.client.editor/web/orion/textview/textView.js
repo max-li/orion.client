@@ -3585,6 +3585,7 @@ define("orion/textview/textView", ['orion/textview/textModel', 'orion/textview/k
 				rulerParent.style.position = "absolute";
 				rulerParent.style.top = "0px";
 				rulerParent.style.cursor = "default";
+				rulerParent.setAttribute("aria-hidden", "true");
 				body.appendChild(rulerParent);
 				if (side === "left") {
 					this._leftDiv = rulerParent;
