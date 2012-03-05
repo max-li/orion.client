@@ -272,6 +272,9 @@ function(messages, mUndoStack, mKeyBinding, mRulers, mAnnotations, mTextDND, mRe
 	
 			this.textView.setKeyBinding(new mKeyBinding.KeyBinding(9, false, true), messages.unindentLines);
 			this.textView.setAction(messages.unindentLines, function() {
+				if(this.textView.isConsumingTabs() === false) {
+					return false;
+				}
 				var editor = this.editor;
 				var model = editor.getModel();
 				var selection = editor.getSelection();

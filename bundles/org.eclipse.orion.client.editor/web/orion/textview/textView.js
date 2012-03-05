@@ -757,6 +757,14 @@ define("orion/textview/textView", ['orion/textview/textModel', 'orion/textview/k
 			return false;
 		},
 		/**
+		 * Returns whether the text view is consuming tab keypresses.
+		 *
+		 * @returns {Boolean} <code>true</code> if tabs are being consumed by the textview
+		 */
+		isConsumingTabs: function() {
+			return this._tabMode;
+		},
+		/**
 		* Returns if the view is loaded.
 		* <p>
 		* @returns {Boolean} <code>true</code> if the view is loaded.
@@ -2638,13 +2646,13 @@ define("orion/textview/textView", ['orion/textview/textModel', 'orion/textview/k
 								if (a.userHandler) {
 									if (!a.userHandler()) {
 										if (a.defaultHandler) {
-											a.defaultHandler();
+											return a.defaultHandler();
 										} else {
 											return false;
 										}
 									}
 								} else if (a.defaultHandler) {
-									a.defaultHandler();
+									return a.defaultHandler();
 								}
 								break;
 							}
@@ -2935,6 +2943,9 @@ define("orion/textview/textView", ['orion/textview/textModel', 'orion/textview/k
 			return true;
 		},
 		_doTab: function (args) {
+			if(this._tabMode === false) {
+				return false;
+			}
 			var text = "\t";
 			if (this._expandTab) {
 				var model = this._model;
@@ -2945,6 +2956,14 @@ define("orion/textview/textView", ['orion/textview/textModel', 'orion/textview/k
 				text = (new Array(spaces + 1)).join(" ");
 			}
 			this._doContent(text);
+			return true;
+		},
+		
+		_doTabMode: function (args) {
+			if(this._tabMode === undefined) {
+				this._tabMode = true;
+			}
+			this._tabMode = !this._tabMode;
 			return true;
 		},
 		
@@ -3279,6 +3298,7 @@ define("orion/textview/textView", ['orion/textview/textModel', 'orion/textview/k
 			bindings.push({name: "enter",			keyBinding: new KeyBinding(13), predefined: true});
 			bindings.push({name: "enter",			keyBinding: new KeyBinding(13, null, true), predefined: true});
 			bindings.push({name: "selectAll",		keyBinding: new KeyBinding('a', true), predefined: true});
+			bindings.push({name: "tabMode",		keyBinding: new KeyBinding('m', true), predefined: true});
 			if (isMac) {
 				bindings.push({name: "deleteNext",		keyBinding: new KeyBinding(46, null, true), predefined: true});
 				bindings.push({name: "deleteWordPrevious",	keyBinding: new KeyBinding(8, null, null, true), predefined: true});
@@ -3374,7 +3394,9 @@ define("orion/textview/textView", ['orion/textview/textModel', 'orion/textview/k
 				{name: "selectAll",		defaultHandler: function() {return self._doSelectAll();}},
 				{name: "copy",			defaultHandler: function() {return self._doCopy();}},
 				{name: "cut",			defaultHandler: function() {return self._doCut();}},
-				{name: "paste",			defaultHandler: function() {return self._doPaste();}}
+				{name: "paste",			defaultHandler: function() {return self._doPaste();}},
+				
+				{name: "tabMode",			defaultHandler: function() {return self._doTabMode();}}
 			];
 		},
 		_createLine: function(parent, div, document, lineIndex, model) {
