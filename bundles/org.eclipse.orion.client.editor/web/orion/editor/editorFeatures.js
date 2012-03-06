@@ -13,8 +13,8 @@
 /*jslint maxerr:150 browser:true devel:true */
 
 define("orion/editor/editorFeatures", ['i18n!orion/editor/nls/messages', 'orion/textview/undoStack', 'orion/textview/keyBinding',
-	'orion/textview/rulers', 'orion/textview/annotations', 'orion/textview/textDND', 'orion/editor/regex'],
-function(messages, mUndoStack, mKeyBinding, mRulers, mAnnotations, mTextDND, mRegex) {
+	'orion/textview/rulers', 'orion/textview/annotations', 'orion/textview/tooltip', 'orion/textview/textDND', 'orion/editor/regex'],
+function(messages, mUndoStack, mKeyBinding, mRulers, mAnnotations, mTooltip, mTextDND, mRegex) {
 
 	function UndoFactory() {
 	}
@@ -434,6 +434,100 @@ function(messages, mUndoStack, mKeyBinding, mRulers, mAnnotations, mTextDND, mRe
 				if (line) {
 					line = parseInt(line, 10);
 					editor.onGotoLine(line - 1, 0);
+				}
+				return true;
+			}.bind(this));
+			
+			this.textView.setKeyBinding(new mKeyBinding.KeyBinding(190, true), messages.nextAnnotation);
+			this.textView.setAction(messages.nextAnnotation, function() {
+				var editor = this.editor;
+				var annotationModel = editor.getAnnotationModel();
+				if(!annotationModel) { return true; }
+				var model = editor.getModel();
+				var line = model.getLineAtOffset(editor.getCaretOffset());
+				var lineEnd = model.getLineEnd(line, true);
+				var annotations = annotationModel.getAnnotations(lineEnd, model.getCharCount());
+				while(annotations.hasNext()) {
+					var annotation = annotations.next();
+					if(annotation.type === "orion.annotation.folding") { continue; }
+					var nextLine = model.getLineAtOffset(annotation.start);
+					if(nextLine) {
+						annotations = annotationModel.getAnnotations(model.getLineStart(nextLine), model.getLineEnd(nextLine));
+						var nextAnnotations = [];
+						while(annotations.hasNext()) {
+							nextAnnotations.push(annotations.next());
+						}
+						var tooltip = mTooltip.Tooltip.getTooltip(this.textView);
+						if (!tooltip) { return true; }
+						var view = this.textView;
+						var rect = view.getClientArea();
+						var cb = function() {
+							setTimeout( function() {
+								tooltip.setTarget({
+									y: view.getLinePixel(nextLine),
+									getTooltipInfo: function() {
+										return { contents: nextAnnotations,
+												 x: view.convert({x: rect.x}, "document", "page").x,
+												 y: view.convert({y: view.getLocationAtOffset(model.getLineStart(nextLine)).y}, "document", "page").y,
+												 maxWidth: rect.width,
+												 maxHeight: rect.height
+											   };
+									}
+								}, 0); 
+							}, 0);
+						};
+						editor.moveSelection(annotation.start, annotation.start, cb);
+					}
+					break;
+				}
+				return true;
+			}.bind(this));
+			
+			this.textView.setKeyBinding(new mKeyBinding.KeyBinding(188, true), messages.prevAnnotation);
+			this.textView.setAction(messages.prevAnnotation, function() {
+				var editor = this.editor;
+				var annotationModel = editor.getAnnotationModel();
+				if(!annotationModel) { return true; }
+				var model = editor.getModel();
+				var line = model.getLineAtOffset(editor.getCaretOffset());
+				var lineStart = model.getLineEnd(line - 1);
+				var annotations = annotationModel.getAnnotations(0, lineStart);
+				var prevAnnotations = [];
+				while(annotations.hasNext()) {
+					var annotation = annotations.next();
+					if(annotation.type === "orion.annotation.folding") { continue; }
+					prevAnnotations.push(annotation);
+				}
+				if(prevAnnotations.length) {
+					var previousAnnotation = prevAnnotations[prevAnnotations.length - 1];
+					var nextLine = model.getLineAtOffset(previousAnnotation.start);
+					if(nextLine) {
+						annotations = annotationModel.getAnnotations(model.getLineStart(nextLine), model.getLineEnd(nextLine));
+						var nextAnnotations = [];
+						while(annotations.hasNext()) {
+							nextAnnotations.push(annotations.next());
+						}
+						var tooltip = mTooltip.Tooltip.getTooltip(this.textView);
+						if (!tooltip) { return true; }
+						var view = this.textView;
+						var rect = view.getClientArea();
+						var cb = function() {
+							setTimeout( function() {
+								tooltip.setTarget({
+									y: view.getLinePixel(nextLine),
+									getTooltipInfo: function() {
+										return { contents: nextAnnotations,
+												 x: view.convert({x: rect.x}, "document", "page").x,
+												 y: view.convert({y: view.getLocationAtOffset(model.getLineStart(nextLine)).y}, "document", "page").y,
+												 maxWidth: rect.width,
+												 maxHeight: rect.height
+											   };
+									}
+								}, 0); 
+							}, 0);
+						};
+						editor.moveSelection(previousAnnotation.start, previousAnnotation.start, cb);
+					}
 				}
 				return true;
 			}.bind(this));

@@ -34,6 +34,8 @@
         "toggleLineComment": "Toggle Line Comment",
         "addBlockComment": "Add Block Comment",
         "removeBlockComment": "Remove Block Comment",
+        "nextAnnotation": "Next Annotation",
+        "prevAnnotation": "Previous Annotation",
         "linkedModeEntered": "Linked Mode entered",
         "linkedModeExited": "Linked Mode exited",
         "syntaxError": "Syntax Error",
