@@ -78,6 +78,16 @@ define(['require', 'dojo', 'dijit', 'orion/util', 'orion/PageUtil', 'dijit/Menu'
 			if (!this.hrefCallback) {
 				this.inherited(arguments);
 			}
+		},
+		/**
+		 * This is necessary to allow Ctrl+Enter to properly open the link.
+		 */
+		_onFocus: function(evt) {
+			this.inherited(arguments);
+			if (this.hrefCallback) {
+				dojo.query("a",this.domNode)[0].focus();
+			}
+		
 		}
 	});
 	
@@ -1006,7 +1016,14 @@ define(['require', 'dojo', 'dijit', 'orion/util', 'orion/PageUtil', 'dijit/Menu'
 				labelType: this.hrefCallback ? "html" : "text",
 				label: this.name,
 				iconClass: this.imageClass,
-				hrefCallback: !!this.hrefCallback
+				hrefCallback: !!this.hrefCallback,
+				onKeyDown: function(evt) {
+					if(this.hrefCallback && !evt.ctrlKey && evt.keyCode === dojo.keys.ENTER) {
+						var link = dojo.query("a",this.domNode)[0];
+						if(link) { window.location=link; }
+						return;
+					}
+				}
 			});
 			if (this.tooltip) {
 				new CommandTooltip({
@@ -1021,10 +1038,10 @@ define(['require', 'dojo', 'dijit', 'orion/util', 'orion/PageUtil', 'dijit/Menu'
 				if (loc) {
 					if (loc.then) {
 						loc.then(dojo.hitch(this, function(l) { 
-							menuitem.set("label", "<a href='"+l+"'>"+this.name+"</a>");
+							menuitem.set("label", "<a href='"+l+"' role='menuitem'>"+this.name+"</a>");
 						}));
 					} else if (loc) {
-						menuitem.set("label", "<a href='"+loc+"'>"+this.name+"</a>");
+						menuitem.set("label", "<a href='"+loc+"' role='menuitem'>"+this.name+"</a>");
 					} else {
 						return;
 					}

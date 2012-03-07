@@ -111,20 +111,23 @@ define(['require', 'dojo', 'dijit', 'orion/util', 'dijit/Menu'], function(requir
 				}
 			}
 			 this.addChild(new dijit.MenuItem({
-				 label: "<a href="+require.toUrl("settings/settings.html") + ">Settings</a>",
-				 onKeyDown: function(evt){if(evt.keyCode===13) window.location=require.toUrl("settings/settings.html");},
-				 _onClick: function(evt) { this.getParent().onItemClick(this, evt); } 
+				 label: "<a href="+require.toUrl("settings/settings.html") + " role='menuitem'>Settings</a>",
+				 onKeyDown: function(evt){if(evt.keyCode===13 && !evt.ctrlKey) window.location=require.toUrl("settings/settings.html");},
+				 _onClick: function(evt) { this.getParent().onItemClick(this, evt); }, 
+				 _onFocus: function(evt) { dojo.query("a",this.domNode)[0].focus(); }
 			 }));
 			 this.addChild(new dijit.MenuItem({
-				 label: "<a href="+require.toUrl("operations/list.html") + ">Background Operations</a>",
-				 onKeyDown: function(evt){if(evt.keyCode===13) window.location=require.toUrl("operations/list.html");},
-				 _onClick: function(evt) { this.getParent().onItemClick(this, evt); } 
+				 label: "<a href="+require.toUrl("operations/list.html") + " role='menuitem'>Background Operations</a>",
+				 onKeyDown: function(evt){if(evt.keyCode===13 && !evt.ctrlKey) window.location=require.toUrl("operations/list.html");},
+				 _onClick: function(evt) { this.getParent().onItemClick(this, evt); },
+				 _onFocus: function(evt) { dojo.query("a",this.domNode)[0].focus(); }
 			 }));
 			 this.addChild(new dijit.MenuSeparator());
 			this.addChild(new dijit.MenuItem({
-				 label: "<a href="+require.toUrl("help/index.jsp") + ">Help</a>",
-				 onKeyDown: function(evt){if(evt.keyCode===13) window.location=require.toUrl("help/index.jsp");},
-				 _onClick: function(evt) { this.getParent().onItemClick(this, evt); } 
+				 label: "<a href="+require.toUrl("help/index.jsp") + " role='menuitem'>Help</a>",
+				 onKeyDown: function(evt){if(evt.keyCode===13 && !evt.ctrlKey) window.location=require.toUrl("help/index.jsp");},
+				 _onClick: function(evt) { this.getParent().onItemClick(this, evt); } ,
+				 _onFocus: function(evt) { dojo.query("a",this.domNode)[0].focus(); }
 			 }));
 			if(this.keyAssistFunction){
 				this.addChild(new dijit.MenuItem({
@@ -134,9 +137,10 @@ define(['require', 'dojo', 'dijit', 'orion/util', 'dijit/Menu'], function(requir
 			}
 			
 			this.addChild(new dijit.MenuItem({
-				 label: "<a href='"+require.toUrl("help/about.html") + "'>About Orion</a>",
-				 onKeyDown: function(evt){if(evt.keyCode===13) window.location=require.toUrl("help/about.html");},
-				 _onClick: function(evt) { this.getParent().onItemClick(this, evt); } 
+				 label: "<a href='"+require.toUrl("help/about.html") + "' role='menuitem'>About Orion</a>",
+				 onKeyDown: function(evt){if(evt.keyCode===13 && !evt.ctrlKey) window.location=require.toUrl("help/about.html");},
+				 _onClick: function(evt) { this.getParent().onItemClick(this, evt); },
+				 _onFocus: function(evt) { dojo.query("a",this.domNode)[0].focus(); }
 			 }));
 			
 		},
