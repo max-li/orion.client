@@ -403,7 +403,7 @@ orion.TextSearcher = (function() {
 			
 			if(this.visible()){
 				return this.findOnce(searchStr ? searchStr : findTextDiv.value, startPos, (focusBackDiv && !dojo.isIE) ? function(){focusBackDiv.focus();} : null);
-			} else if(this._lastSearchString && this._lastSearchString.length > 0){
+			} else if(searchStr || (this._lastSearchString && this._lastSearchString.length > 0)){
 				var retVal = this._prepareFind(searchStr ? searchStr : this._lastSearchString, startPos);
 				return this._doFind(retVal.text, retVal.searchStr, retVal.startIndex, !next, this._wrapSearch);
 			}
